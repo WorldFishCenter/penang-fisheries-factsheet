@@ -11,6 +11,7 @@ library(ggdist)
 library(ggforce)
 library(brms)
 library(showtext)
+library(ggrepel)
 font_paths("fonts")
 font_add(family = "RobotoC", regular = "fonts/Roboto_Condensed/RobotoCondensed-Regular.ttf", 
          bold = "fonts/Roboto_Condensed/RobotoCondensed-Bold.ttf")
@@ -26,6 +27,7 @@ drake::loadd(landings_clean)
 drake::loadd(landing_model)
 drake::loadd(vessel_model)
 drake::loadd(species_clean)
+drake::loadd(landing_sites)
 
 trips <- trips %>%
   dplyr::filter(date < as.Date("2021-09-01"))
@@ -76,12 +78,16 @@ points %>%
   dplyr::arrange(time) %>%
   dplyr::mutate(trip = forcats::fct_reorder(as.character(trip), !is.na(trip_id_landing))) %>%
   ggplot(aes(x = lng, y = lat, group = trip, colour = !is.na(trip_id_landing))) +
-  geom_path(size = 0.3, alpha = 0.5) +
-  guides(colour = guide_legend()) +
+  geom_path(size = 0.3, alpha = 0.3) +
+  geom_point(data = landing_sites, colour = "black", group = "") +
+  geom_text_repel(data = landing_sites, 
+                  aes(group = name, label = name), colour = "black", 
+                  box.padding = 2, size = 3.7, segment.size = 0.25, family = "RobotoC") + 
+  guides(colour = guide_legend(override.aes = list(alpha = 1))) +
   scale_color_manual(#values = c("grey70", "grey30"), 
                      values = c("grey70", "#1a4985"),
                      labels = c("trips without landing data", "trips with landing data")) +
-  coord_quickmap() +
+  coord_quickmap(xlim = c(99.65, 100.75)) +
   theme_minimal() +
   theme(legend.position = c(1,1),
         legend.justification = c(1,1),

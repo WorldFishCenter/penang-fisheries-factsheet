@@ -110,3 +110,11 @@ process_trips <- function(landings_clean, points, boats, report_dates = NULL){
   #   scale_colour_viridis_c(option = "magma") +
   #   theme(legend.position = "none")
 }
+
+clean_landing_sites <- function(path){
+  readr::read_delim(path, ",",
+                    col_names = c("lat", "lng", "name")) %>%
+    dplyr::mutate(lat = as.numeric(lat),
+                  lng = as.numeric(lng),
+                  name = stringr::str_trim(name))
+}

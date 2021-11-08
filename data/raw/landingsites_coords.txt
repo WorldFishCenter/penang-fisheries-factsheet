@@ -1,0 +1,7 @@
+5.280951, 100.256221, Kampung Binjai
+5.459676, 100.210950, Teluk Bahang
+5.392420, 100.195782, Balik Pulau
+5.305136, 100.297787, Sungai Keluang
+5.578224, 100.341200, Kuala Mudah
+5.286847, 100.224674, Sungai Batu
+
